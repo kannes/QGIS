@@ -2636,7 +2636,7 @@ void QgsLayoutDesignerDialog::exportAtlasToRaster()
       return;
     }
     QString error;
-    printAtlas->setFilenameExpression( QStringLiteral( "'output_'||@atlas_featurenumber" ), error );
+    printAtlas->setFilenameExpression( QStringLiteral( "'output_' || lpad(@atlas_featurenumber, length(to_string(@atlas_totalfeatures)), 0)" ), error );
   }
 
   QString lastUsedDir = defaultExportPath();
@@ -2803,7 +2803,7 @@ void QgsLayoutDesignerDialog::exportAtlasToSvg()
       return;
     }
     QString error;
-    printAtlas->setFilenameExpression( QStringLiteral( "'output_'||@atlas_featurenumber" ), error );
+    printAtlas->setFilenameExpression( QStringLiteral( "'output_' || lpad(@atlas_featurenumber, length(to_string(@atlas_totalfeatures)), 0)" ), error );
   }
 
   QString lastUsedDir = defaultExportPath();
@@ -3013,7 +3013,7 @@ void QgsLayoutDesignerDialog::exportAtlasToPdf()
         return;
       }
       QString error;
-      printAtlas->setFilenameExpression( QStringLiteral( "'output_'||@atlas_featurenumber" ), error );
+      printAtlas->setFilenameExpression( QStringLiteral( "'output_' || lpad(@atlas_featurenumber, length(to_string(@atlas_totalfeatures)), 0)" ), error );
     }
 
 
