@@ -83,7 +83,9 @@ def register_function(function, arg_count, group, usesgeometry=False,
                         self.function(values, feature, parent, context)
                     return self.function(values, feature, parent)
             except Exception as ex:
-                parent.setEvalErrorString(str(ex))
+                formatted_traceback = ''.join(traceback.format_exception(None, ex, ex.__traceback__))
+                formatted_exception = f"{ex}:<pre>{formatted_traceback}</pre>"
+                parent.setEvalErrorString(formatted_exception)
                 return None
 
         def usesGeometry(self, node):
