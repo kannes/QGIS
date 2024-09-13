@@ -75,6 +75,8 @@ class QgsVirtualLayerSourceSelect : public QgsAbstractDataSourceWidget, private 
     void refresh() override;
     void addButtonClicked() override;
 
+  protected:
+    void reject() override;
 
   private slots:
     void testQuery();
@@ -104,6 +106,7 @@ class QgsVirtualLayerSourceSelect : public QgsAbstractDataSourceWidget, private 
     void addEmbeddedLayer( const QString &name, const QString &provider, const QString &encoding, const QString &source );
     QgsLayerTreeView *mTreeView = nullptr;
     bool preFlight();
+    QString mInitialQueryText;
 };
 
 #endif

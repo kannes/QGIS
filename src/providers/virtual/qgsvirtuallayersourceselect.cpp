@@ -120,6 +120,41 @@ QgsVirtualLayerSourceSelect::QgsVirtualLayerSourceSelect( QWidget *parent, Qt::W
   emit enableButtons( true );
 }
 
+void QgsVirtualLayerSourceSelect::reject()
+{
+
+  if ( mQueryEdit->text() != mInitialQueryText )
+  {
+
+    QgsSettings settings;
+    const bool askToDiscardEditedExpression = settings.value( QStringLiteral( "askToDiscardEditedVirtualLayerQuery" ), true, QgsSettings::Gui ).toBool();
+
+    if ( askToDiscardEditedExpression )
+    {
+      QMessageBox confirmMessage( QMessageBox::Question,
+                                  tr( "Query was Edited" ),
+                                  tr( "The changes to the query will be discarded. Would you like to continue?" ),
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  this );
+      confirmMessage.setCheckBox( new QCheckBox( tr( "Don't show this message again" ) ) );
+      confirmMessage.checkBox()->setChecked( false );
+      confirmMessage.button( QMessageBox::Yes )->setText( tr( "Discard changes" ) );
+
+      int res = confirmMessage.exec();
+
+      if ( confirmMessage.checkBox()->isChecked() )
+      {
+        settings.setValue( QStringLiteral( "askToDiscardEditedVirtualLayerQuery" ), false, QgsSettings::Gui );
+      }
+
+      if ( res != QMessageBox::Yes )
+        return;
+    }
+  }
+
+  QDialog::reject();
+}
+
 QgsVirtualLayerSourceSelect::~QgsVirtualLayerSourceSelect()
 {
   QgsSettings settings;
@@ -155,6 +190,7 @@ void QgsVirtualLayerSourceSelect::layerComboChanged( int idx )
   if ( !def.query().isEmpty() )
   {
     mQueryEdit->setText( def.query() );
+    mInitialQueryText = def.query();
   }
 
   if ( !def.uid().isEmpty() )
